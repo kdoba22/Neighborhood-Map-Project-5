@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Downtown St. Louis</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSS links-->
+        <link rel="stylesheet" href="css/style.css">
+        <!-- load jquery -->
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js">\x3C/script>')</script>
+        <!-- google maps api call-->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script src="js/vendor/knockout-3.2.0.js"></script>
+        <script src="js/main.js"></script>
+    </head>
+    <body>
+        <!--the map element will be used here and fill 100% of the screen-->
+        <div id="map"></div>
+        <!--this holds our entire listbox and search it will be added to map controls-->
+            <div id="searchui">
+            <!--this is the filter/search box-->
+                <input id="searchbox" type="search" placeholder="Type here" data-bind="value: pointFilter, valueUpdate: 'keyup'" autocomplete="off"> 
+            <!--this is the points list-->
+                <ul id="pointList" data-bind="visible: listVisible, template: {name: 'pointsTemplate',foreach: shownList}"></ul>  
+                <div class="wikipedia-container">
+                    <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
+
+                    <ul id="wikipedia-links">Select link from list or click on Map Marker and find relevant Wikipedia article here!</ul>
+                </div>
+            </div>
+        <!--this is a knockout template used for point list items  ,   -->
+            <script type="text/html" id="pointsTemplate">
+                    <li data-bind="event: {mouseover: $parent.mouseHere, mouseleave: $parent.mouseGone}, click:$parent.selectPoint, css: $parent.getStyle($data)">  
+                    <strong data-bind="text: name"></strong> –
+                    <span data-bind="text: '(' + category + ')'"></span>
+                </li>
+            </script>
+        </div>
+    </body>
+</html>
