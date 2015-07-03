@@ -57,7 +57,7 @@ var viewModel = function(){
     /* scope alias */
     var self = this;
     /* clear session storage any time we load */
-    sessionStorage.clear();
+ //   sessionStorage.clear();
     /* how many items to show in filtered list max? */
     /* sets based on window height to always fit a clean amount (min 1) */
 
@@ -85,8 +85,6 @@ var viewModel = function(){
      */
     self.zNum = 1;
    
-    /* refit map after window resize? */
-    self.refitResizeCheck = ko.observable(true);
     /* is the list visible? */
     self.listVisible = ko.observable(true);
 
@@ -97,15 +95,7 @@ var viewModel = function(){
     self.selectPoint = function(point) {
         /* store the current point so we can still do things to it later */
         var oldPoint = self.currentPoint();
-        
-        /* if we find that the current window falls below 800pixels, remove the list
-           if the windows size gets 800 pixels or larger, show the list again  */
-
-        if ($(window).width() < 800) {
-                self.toggleList(false);}
-            else{
-                self.toggleList(true);
-            }
+        /* center on the new point and tell it to offset */
 
         self.currentPoint(point);
 
@@ -325,40 +315,6 @@ var viewModel = function(){
         self.listPoint()-1 + self.maxListNum());
     });
 
-/**
-     * shows or hides the list.  Fired by clicks on our rollup icon/div.
-     * this is done by setting listVisible which is used in the knockout
-     * data binds as a boolean for the visible binding
-     */
-    self.toggleList = function(makeVisible){
-        console.log(typeof makeVisible);
-        /* check if we sent a visible argument and if not, make one
-         * for some reason it feeds an object when it is left blank
-         * so we have to check if it is a boolean instead of undefined
-         */
-        if (typeof makeVisible !== 'boolean') {
-            if (self.listVisible() === 0) {
-                makeVisible = true;
-            }
-            else {
-                makeVisible = false;
-            }
-        }
-
-        /* change actual list now that we know if we are hiding or showing */
-        if(makeVisible === true){
-            self.listVisible(1);
- //           self.rollupText('collapse list');
- //           self.rollupIconPath('img/collapseIcon.png');
-        }
-        else if (makeVisible === false){
-            self.listVisible(0);
- //           self.rollupText('expand list');
- //           self.rollupIconPath('img/expandIcon.png');
-        }
-
-    };
-
 
     /**
      * run when shownPoints changes.  applies the visual intent of
@@ -392,44 +348,6 @@ var viewModel = function(){
             if (thisPoint) {thisPoint.marker.setVisible(true);}
         }
     };
-
-    /**
-     * fit our map to show all of the currently visible markers at once
-     * relies on google to do the actual zooming and panning here
-     */
-    self.refitMap = function() {
-        //set bounds to a fresh viewpoints bounds so we start clean
-        var bounds = new google.maps.LatLngBounds();
-
-        //we don't want to try to zoom into a single point or no point
-        //so make sure we are showing at least 2 before fitting the map
-        var pointsLen = self.shownPoints().length;
-        if(pointsLen >= 2) {
-            for (var i = 0; i < pointsLen; i++) {
-                // make the bounds big enough to fit this point
-                bounds.extend (self.shownPoints()[i].marker.position);
-            }
-            // apply the new bounds to the map
-            self.theMap.map.fitBounds(bounds);
-        }
-    };
-
-    /* event to resize the map and list size when the browser window resizes */
-    $(window).resize(function () {
-        /* if we find that the current window falls below 800pixels, remove the list
-           if the windows size gets 800 pixels or larger, show the list again  */
-        if (self.refitResizeCheck()) {
-            self.refitMap();
-            if ($(window).width() < 800) {
-                self.toggleList(false);}
-            else{
-                self.toggleList(true);
-            }
-        }
-    });
-
-    /* refit map once now that all of the points should be loaded */
-    self.refitMap();
    
 };
 

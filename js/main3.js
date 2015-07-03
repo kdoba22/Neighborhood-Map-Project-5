@@ -97,15 +97,7 @@ var viewModel = function(){
     self.selectPoint = function(point) {
         /* store the current point so we can still do things to it later */
         var oldPoint = self.currentPoint();
-        
-        /* if we find that the current window falls below 800pixels, remove the list
-           if the windows size gets 800 pixels or larger, show the list again  */
-
-        if ($(window).width() < 800) {
-                self.toggleList(false);}
-            else{
-                self.toggleList(true);
-            }
+        /* center on the new point and tell it to offset */
 
         self.currentPoint(point);
 
@@ -325,40 +317,6 @@ var viewModel = function(){
         self.listPoint()-1 + self.maxListNum());
     });
 
-/**
-     * shows or hides the list.  Fired by clicks on our rollup icon/div.
-     * this is done by setting listVisible which is used in the knockout
-     * data binds as a boolean for the visible binding
-     */
-    self.toggleList = function(makeVisible){
-        console.log(typeof makeVisible);
-        /* check if we sent a visible argument and if not, make one
-         * for some reason it feeds an object when it is left blank
-         * so we have to check if it is a boolean instead of undefined
-         */
-        if (typeof makeVisible !== 'boolean') {
-            if (self.listVisible() === 0) {
-                makeVisible = true;
-            }
-            else {
-                makeVisible = false;
-            }
-        }
-
-        /* change actual list now that we know if we are hiding or showing */
-        if(makeVisible === true){
-            self.listVisible(1);
- //           self.rollupText('collapse list');
- //           self.rollupIconPath('img/collapseIcon.png');
-        }
-        else if (makeVisible === false){
-            self.listVisible(0);
- //           self.rollupText('expand list');
- //           self.rollupIconPath('img/expandIcon.png');
-        }
-
-    };
-
 
     /**
      * run when shownPoints changes.  applies the visual intent of
@@ -414,17 +372,34 @@ var viewModel = function(){
         }
     };
 
+    /* keep an event istener on our infowindow so we can easily close it 
+     * on small screens where it may block visibility.  Similar to jQuery live
+     * listener but this should wait for the infowindow to complete showing
+     * first so it is a tiny bit less likely to close info before the user
+     * is able to see it.
+     */
+    // google.maps.event.addDomListener(self.infowindow, 'domready', function() {
+    //     $('#infoContent').click(function() {
+            /* close infowidow if we click anywhere at all while on a mobile 
+             * to prevent issues with infowindow taking up the screen on phones
+             */
+    //         if ($(window).width() <= 800 && self.infowindow.isOpen === true){
+    //             self.infowindow.close();
+    //             self.infowindow.isOpen = false;
+    //             self.infoWindowClosed();
+    //         }
+    //     });
+    // });
+
     /* event to resize the map and list size when the browser window resizes */
     $(window).resize(function () {
-        /* if we find that the current window falls below 800pixels, remove the list
-           if the windows size gets 800 pixels or larger, show the list again  */
+        /* change max number of list items to cleanly fit in
+         * the new window height
+         */
+ //       self.maxListNum(Math.max(1,Math.ceil(($(window).height() -150)/30)));
+        /* refit the map when user resizes the window unless option is off */
         if (self.refitResizeCheck()) {
             self.refitMap();
-            if ($(window).width() < 800) {
-                self.toggleList(false);}
-            else{
-                self.toggleList(true);
-            }
         }
     });
 

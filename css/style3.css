@@ -38,11 +38,9 @@ body {
   min-width: 20em;      /* 320px/16=20em  */
   margin: 1% 0 0 2%;
   font-family: Roboto,Arial,sans-serif;
+  /*font-size: 11px;*/
   font-size: .69em;   /* 11px/16=.69em  */
-  background-color: #ffffff;
-  border: .06em  solid black;
-  opacity: 0.6;
-  filter: alpha(opacity=60); /* For IE8 and earlier */
+  background-color: rgba(255,255,255,0.7);
 }
 #pointList {
   background: rgba(255, 255, 255, 1);
