@@ -385,12 +385,12 @@ var viewModel = function(){
         }
         /* now show all markers that we actually want shown. */
 
-        var thisPoint;
+        var thisPointForLoop;
         for (i = 0; i < pointsLen; i++) {
             /* make sure the point is defined before messing with it */
         /* var thisPoint = self.shownPoints()[i]; */
-            thisPoint = self.shownPoints()[i];
-            if (thisPoint) {thisPoint.marker.setVisible(true);}
+            thisPointForLoop = self.shownPoints()[i];
+            if (thisPointForLoop) {thisPoint.marker.setVisible(true);}
         }
     };
 
