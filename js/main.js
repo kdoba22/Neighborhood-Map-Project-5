@@ -390,7 +390,7 @@ var viewModel = function(){
             /* make sure the point is defined before messing with it */
         /* var thisPoint = self.shownPoints()[i]; */
             thisPointForLoop = self.shownPoints()[i];
-            if (thisPointForLoop) {thisPoint.marker.setVisible(true);}
+            if (thisPointForLoop) {thisPointForLoop.marker.setVisible(true);}
         }
     };
 
