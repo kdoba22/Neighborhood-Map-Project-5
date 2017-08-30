@@ -51,7 +51,7 @@ var CallWiki = function(wikiURL){
 };
 
 /**
- * This is the primary knockout view model 
+ * This is the primary knockout view model
  */
 var viewModel = function(){
     /* scope alias */
@@ -84,20 +84,20 @@ var viewModel = function(){
     /* counter for our zIndex so each marker is unique
      */
     self.zNum = 1;
-   
+
     /* refit map after window resize? */
     self.refitResizeCheck = ko.observable(true);
     /* is the list visible? */
     self.listVisible = ko.observable(true);
 
     /**
-     * sets our active point, 
+     * sets our active point,
      * @param  {point object} point [point we are selecting]
      */
     self.selectPoint = function(point) {
         /* store the current point so we can still do things to it later */
         var oldPoint = self.currentPoint();
-        
+
         /* if we find that the current window falls below 800pixels, remove the list
            if the windows size gets 800 pixels or larger, show the list again  */
 
@@ -232,7 +232,7 @@ var viewModel = function(){
 
         /* category used for both display and filtering */
         this.category = category;
-        
+
         /* boolean for if we are currently hovering
          *over this point's list or marker
          */
@@ -271,7 +271,7 @@ var viewModel = function(){
 
     /* our point list */
     self.points = ko.observableArray([
-        new self.point('City Museum', 38.6336, 
+        new self.point('City Museum', 38.6336,
             -90.2006, 'City_Museum', 'museum'),
         new self.point('Edward Jones Dome', 38.632912,
             -90.187706, 'Edward_Jones_Dome', 'Football'),
@@ -299,7 +299,7 @@ var viewModel = function(){
               return      (point.name.toLowerCase().indexOf(self.pointFilter().
                         toLowerCase()) !== -1 ||
                     point.category.toLowerCase().indexOf(self.pointFilter().
-                        toLowerCase()) !== -1);         
+                        toLowerCase()) !== -1);
         });
     }, self);
 
@@ -307,12 +307,11 @@ var viewModel = function(){
     self.shownPoints.subscribe(function() {
         /* if we change which points are intended to be shown
          * also go ahead and apply that to the actual visual markers
-         */        
-
+         */
         self.toggleMarkers();
 
         /*  clears the wikipedia link section if a new filter entry has occured */
-        var $wikiElem = $('#wikipedia-links');         
+        var $wikiElem = $('#wikipedia-links');
         $wikiElem.text("");
     });
 
@@ -388,7 +387,9 @@ var viewModel = function(){
 
         for (i = 0; i < pointsLen; i++) {
             /* make sure the point is defined before messing with it */
-            var thisPoint = self.shownPoints()[i];
+            console.log("Doba Keith");
+        /* var thisPoint = self.shownPoints()[i]; */
+            thisPoint = self.shownPoints()[i];
             if (thisPoint) {thisPoint.marker.setVisible(true);}
         }
     };
@@ -430,7 +431,7 @@ var viewModel = function(){
 
     /* refit map once now that all of the points should be loaded */
     self.refitMap();
-   
+
 };
 
 /**
