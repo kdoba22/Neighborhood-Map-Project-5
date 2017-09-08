@@ -1,6 +1,8 @@
-/**
- * This file is the primary javascript
- */
+
+var googleSuccess = function(){
+  ko.applyBindings(new viewModel());
+};
+
 var TheMap = function(){
 /*the below latitude and longitude points represent the center of my map
   center: { lat: 38.627524, lng: -90.194651},  ATT BLDG 909 Chestnut St. } */
@@ -16,7 +18,6 @@ var TheMap = function(){
         center: new google.maps.LatLng(lat, long),
         mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-
     this.map =
         new google.maps.Map(document.getElementById('map'), this.mapOptions);
 };
@@ -29,9 +30,9 @@ var CallWiki = function(wikiURL){
     $wikiElem.text("");
 // Wikipedia AJAX request goes here
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + wikiURL + '&format=json&callback=wikiCallback';
-    var wikiRequestTimeout = setTimeout(function(){
-        $wikiElem.text("failed to get wikipedia resources");
-    }, 8000);
+    // var wikiRequestTimeout = setTimeout(function(){
+    //     $wikiElem.text("failed to get wikipedia resources");
+    // }, 8000);
 
     $.ajax({
         url: wikiUrl,
@@ -45,9 +46,44 @@ var CallWiki = function(wikiURL){
                 var url = 'http://en.wikipedia.org/wiki/' + articleStr;
                 $wikiElem.append('<li><a href ="' + url + '">' + articleStr + '</a></li>');
             }
-            clearTimeout(wikiRequestTimeout);
-        }
+    //       clearTimeout(wikiRequestTimeout);
+         },
+         error: function(errorMessage){
+           $wikiElem.text("failed to get wikipedia resources");
+         }
     });
+
+
+
+    // $.getJSON(wikiUrl, function( response ){
+    //   var myJSON = JSON.stringify(response);
+    //   console.log("Keith - " + myJSON)
+      // var articleList = response[1];
+      //
+      //
+      // for (var i =0; i < articleList.length; i++){
+      //   articleStr = articleList[i];
+      //   var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+      //   $wikiElem.append('<li><a href ="' + url + '">' + articleStr + '</a></li>');
+      // }
+    //});
+
+    // $.getJSON(wikiUrl, function (response){
+    //
+    //   var articleList = response[1];
+    //
+    //   var myJSON = JSON.stringify(articleList);
+    //   console.log("Keith - " + myJSON)
+      // for (var i =0; i < articleList.length; i++){
+      //             articleStr = articleList[i];
+      //             var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+      //             $wikiElem.append('<li><a href ="' + url + '">' + articleStr + '</a></li>');
+      //         }
+  //});
+
+    // .error(function(e){
+    //   $wikiElem.text("failed to get wikipedia resources");
+    // });
 };
 
 /**
@@ -101,11 +137,11 @@ var viewModel = function(){
         /* if we find that the current window falls below 800pixels, remove the list
            if the windows size gets 800 pixels or larger, show the list again  */
 
-        if ($(window).width() < 800) {
-                self.toggleList(false);}
-            else{
-                self.toggleList(true);
-            }
+        // if ($(window).width() < 800) {
+        //         self.toggleList(false);}
+        //     else{
+        //         self.toggleList(true);
+        //     }
 
         self.currentPoint(point);
 
@@ -439,6 +475,6 @@ var viewModel = function(){
  * the view model, which also puts into place all of the instantiations and
  * logic setup
  */
-$(function(){
-    ko.applyBindings(new viewModel());
-});
+//$(function(){
+//    ko.applyBindings(new viewModel());
+//});

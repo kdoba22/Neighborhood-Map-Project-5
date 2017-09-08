@@ -1,4 +1,4 @@
-html,
+Fwikipediahtml,
 body {
     height: 100%;
     margin: 0em;
@@ -32,8 +32,6 @@ body {
   top: 0em;
   left:0em;
   width: 95%;
-  /*max-width: 350px;
-  min-width: 320px;*/
   max-width: 21.88em;   /* 350px/16=21.88em  */
   min-width: 20em;      /* 320px/16=20em  */
   margin: 1% 0 0 2%;
@@ -51,7 +49,7 @@ body {
   border: .06em solid rgba(0, 0, 0, 0); /* 1px/16=.06em  */
 }
 /*this is the search-filter box */
-#searchbox {
+#searchbox {  
     margin: 0em;
     background-color: #fff;
     /*padding: 0 11px 0 13px;*/
