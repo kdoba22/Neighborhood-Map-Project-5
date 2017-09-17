@@ -5,19 +5,7 @@ body {
     padding: 0em;
     /*font: 16px/26px Helvetica, Helvetica Neue, Arial;*/
     font: 1em/1.63em Helvetica, Helvetica Neue, Arial;  /* 16px/16=1em   && 26px/16=1.63em */
-}
-.hoveredListPoint {
-    color: blue;
-    font-size: 1.2em;
-}
-
-.currentListPoint {
-    color: green;
-}
-
-.hoveredCurrentListPoint {
-    color: green;
-    font-size: 1.2em;
+    font-family: Arial, Helvetica, "Times New Roman";
 }
 #map {
   width: 100%;
@@ -29,7 +17,7 @@ body {
 /* this holds all of our search and list ui*/
 #searchui {
   position: absolute;
-  top: 0em;
+  top: 3em;
   left:0em;
   width: 95%;
   max-width: 21.88em;   /* 350px/16=21.88em  */
@@ -49,7 +37,7 @@ body {
   border: .06em solid rgba(0, 0, 0, 0); /* 1px/16=.06em  */
 }
 /*this is the search-filter box */
-#searchbox {  
+#searchbox {
     margin: 0em;
     background-color: #fff;
     /*padding: 0 11px 0 13px;*/
