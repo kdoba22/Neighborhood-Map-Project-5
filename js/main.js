@@ -46,7 +46,7 @@ var CallWiki = function(wikiURL){
 
 var viewModel = function(){
     var self = this;
-
+    //initialize the map
     self.initMap = new initMap();
     //keep track of number of markers
     self.pointCtr = 1;
@@ -76,9 +76,9 @@ var viewModel = function(){
       this.wikiURL = wikiURL;
       this.lat = lat;
       this.long = long;
-      this.redicon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-      this.blueIcon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-      this.greenIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+      this.redicon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+      this.blueIcon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+      this.greenIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
 
       //map marker for this point
       this.marker = new google.maps.Marker({
@@ -138,7 +138,7 @@ var viewModel = function(){
     self.shownPoints = ko.computed(function() {
       return ko.utils.arrayFilter(self.points(), function(point) {
         return      (point.name.toLowerCase().indexOf(self.pointFilter().
-                      toLowerCase()) !== -1)
+                      toLowerCase()) !== -1);
       });
     }, self);
 
