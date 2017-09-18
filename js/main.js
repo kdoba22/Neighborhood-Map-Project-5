@@ -54,70 +54,63 @@ var viewModel = function(){
     self.listVisible = ko.observable(true);
     //select current point
     self.selectPoint = function(point) {
-        // store new point
-        self.currentPoint(point);
-        // call wikipedia routine with new point
-         CallWiki(self.currentPoint().wikiURL);
-        point.marker.setIcon(point.orangeIcon);
+      // store new point
+      self.currentPoint(point);
+      // call wikipedia routine with new point
+      CallWiki(self.currentPoint().wikiURL);
+      point.marker.setIcon(point.greenIcon);
     };
-
     // When mouse lands on marker or list item turn marker blue
-    self.mouseHere = function(point) {
+    self.mouseOver = function(point) {
       point.marker.setIcon(point.blueIcon);
     };
 
     // When mouse lands on marker or list item turn marker red
-    self.mouseGone = function(point) {
+    self.mouseLeave = function(point) {
       point.marker.setIcon(point.redIcon);
     };
 
-    // This creates my array of locations(points)
+    // This creates an array(collection) of locations(points)
     self.point = function(name, lat, long, wikiURL) {
+      this.name = name;
+      this.wikiURL = wikiURL;
+      this.lat = lat;
+      this.long = long;
+      this.redicon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+      this.blueIcon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+      this.greenIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
 
-        this.redicon = "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-        this.blueIcon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-        this.greenIcon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-        this.orangeIcon = "http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
+      //map marker for this point
+      this.marker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat, long),
+        title: name,
+        map: self.initMap.map,
+        zIndex: self.pointCtr
+      });
 
-        this.name = name;
-        this.wikiURL = wikiURL;
-        this.lat = lat;
-        this.long = long;
+      // keep track of number of markers
+      self.pointCtr++;
 
-        /* the map marker for this point */
-        this.marker = new google.maps.Marker({
-            position: new google.maps.LatLng(lat, long),
-            title: name,
-            map: self.initMap.map,
-            zIndex: self.pointCtr
-        });
+      // the bind in the below statements is used to preserve the context of the current object
+      //https://docs.microsoft.com/en-us/scripting/javascript/advanced/using-the-bind-method-javascript
 
-        // keep track of number of markers
-        self.pointCtr++;
-        // the bind in the below statements is used to
-        // preserve the context of the current object
-        //https://docs.microsoft.com/en-us/scripting/javascript/advanced/using-the-bind-method-javascript
+      // click event for this point's marker
+      google.maps.event.addListener(this.marker, 'click', function() {
+        self.selectPoint(this);
+      }.bind(this));
 
-        // click event for this point's marker and calls the same function
-        // for both list items and markers
-        google.maps.event.addListener(this.marker, 'click', function() {
-            self.selectPoint(this);
-        }.bind(this));
+      //mouseover event for this point's marker
+      google.maps.event.addListener(this.marker, 'mouseover', function() {
+        self.mouseOver(this);
+      }.bind(this));
 
-        //mouseover event for this point's marker and calls the same function
-        // for both list items and m,arkers
-        google.maps.event.addListener(this.marker, 'mouseover', function() {
-            self.mouseHere(this);
-        }.bind(this));
-
-        //mouseout event for  this point's marker and calls the same function
-        // for both list items and m,arkers
-        google.maps.event.addListener(this.marker, 'mouseout', function() {
-            self.mouseGone(this);
-        }.bind(this));
+      //mouseout event for this point's marker
+      google.maps.event.addListener(this.marker, 'mouseout', function() {
+        self.mouseLeave(this);
+      }.bind(this));
     };
 
-    //this observable array is using a collection array
+    //this observable array is a collection array
     //http://knockoutjs.com/examples/collections.html
     self.points = ko.observableArray([
       new self.point('City Museum', 38.6336,
@@ -134,31 +127,31 @@ var viewModel = function(){
           -90.192813, 'Busch_Stadium'),
     ]);
 
-    /* the point we currently have clicked/selected, if any */
+    //define the current selected point as an observable
     self.currentPoint = ko.observable();
 
     // A change in the filter will trigger changing our visible points
-    self.pointFilter = ko.observable('');
+    self.pointFilter = ko.observable("");
 
    // show markers based on filter results.  Much of the syntax came from
    // http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html
     self.shownPoints = ko.computed(function() {
-        return ko.utils.arrayFilter(self.points(), function(point) {
-              return      (point.name.toLowerCase().indexOf(self.pointFilter().
-                        toLowerCase()) !== -1)
-        });
+      return ko.utils.arrayFilter(self.points(), function(point) {
+        return      (point.name.toLowerCase().indexOf(self.pointFilter().
+                      toLowerCase()) !== -1)
+      });
     }, self);
 
     // the subscribe function is called whenever any properties of the
-    // ko.computed above changes
+    // ko.computed variable shownPoints changes
     self.shownPoints.subscribe(function() {
-        self.toggleMarkers();
-        /*  clears the wikipedia link section if a new filter entry has occured */
-        var $wikiElem = $('#wikipedia-links');
-        $wikiElem.text("");
+      self.toggleMarkers();
+      //  clears the wikipedia link section if a new filter entry has occured
+      var $wikiElem = $('#wikipedia-links');
+      $wikiElem.text("");
     });
 
-    // show only filtered items,
+    // show only filtered items using .slice()
     self.listPoint = ko.observable();
     self.shownList = ko.computed(function(){
     return self.shownPoints().slice(self.listPoint());
@@ -166,22 +159,19 @@ var viewModel = function(){
 
     // we get here anytime we need to refigure shown markers(filter)
     // toggle markers back to Red
-
     self.toggleMarkers = function(){
-
-        var pointsLen = self.points().length;
-        for (var i = 0; i < pointsLen; i++) {
-            var thisPoint = self.points()[i];
-            // hide all markers, and revert back to red
-            thisPoint.marker.setVisible(false);
-            thisPoint.marker.setIcon(thisPoint.redIcon);
-        }
-
-        var visiblePoints;
+      var pointsLen = self.points().length;
+      for (var i = 0; i < pointsLen; i++) {
+        var thisPoint = self.points()[i];
+        // hide all markers, and revert back to red
+        thisPoint.marker.setVisible(false);
+        thisPoint.marker.setIcon(thisPoint.redIcon);
+      }
+      var visiblePoints;
         for (i = 0; i < pointsLen; i++) {
-            //Show filtered Markers
-            visiblePoints = self.shownPoints()[i];
-            if (visiblePoints) {visiblePoints.marker.setVisible(true);} // turn on only needed markers
+          //Show filtered Markers
+          visiblePoints = self.shownPoints()[i];
+          if (visiblePoints) {visiblePoints.marker.setVisible(true);} // turn on only needed markers
         }
     };
 
@@ -199,12 +189,12 @@ var viewModel = function(){
         }
     };
 
-    // resfit map if screen size changes
+    // resize map if screen size changes
     $(window).resize(function () {
         self.refitMap();
     });
 
-    // set bounds of map on startup oand on screen size changing
+    // set bounds of map on startup and  when screen size changing
     self.refitMap();
 
 };

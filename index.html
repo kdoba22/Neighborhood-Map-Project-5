@@ -3,23 +3,22 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Downtown St. Louis</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
       <div id="map"> </div>
-        <div id="searchui">
-          <input id="searchbox" type="search" placeholder="Type here" data-bind="value: pointFilter, valueUpdate: 'keyup'" autocomplete="off">
-          <ul id="pointList" data-bind="visible: listVisible, template: {name: 'pointsTemplate',foreach: shownList}"></ul>
+        <div id="filter">
+          <input type="search" placeholder="Type here" data-bind="value: pointFilter, valueUpdate: 'keyup'" autocomplete="off">
+          <ul data-bind="visible: listVisible, template: {name: 'pointsTemplate',foreach: shownList}"></ul>
           <div class="wikipedia-container">
-            <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
+            <h3 id="wikipedia-header">Wikipedia Links</h3>
             <div id="wikipedia-links">Select link from list or click on Map Marker and find relevant Wikipedia article here!</div>
           </div>
         </div>
         <script type="text/html" id="pointsTemplate">
-          <li data-bind="event: {mouseover: $parent.mouseHere, mouseleave: $parent.mouseGone}, click:$parent.selectPoint">
+          <li data-bind="event: {mouseover: $parent.mouseOver, mouseleave: $parent.mouseLeave}, click:$parent.selectPoint">
             <strong data-bind="text: name"></strong>
           </li>
         </script>
