@@ -2,7 +2,7 @@ Fwikipediahtml,
 body {
     height: 100%;
     margin: 0em;
-    padding: 0em;
+    padding: 0;
     font: 1em;
     font-family: Arial, Helvetica, "Times New Roman";
 }
@@ -16,10 +16,10 @@ body {
 #filter {
   position: absolute;
   top: 3em;
-  left:3em;
+  left: 3em;
   max-width: 21.5em;
   font-size: .7em;
-  background-color: #ffffff;
+  background-color: #fff;
   border: .1em  solid black;
   opacity: 0.6;
 }

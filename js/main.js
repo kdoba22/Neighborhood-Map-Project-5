@@ -26,22 +26,23 @@ var CallWiki = function(wikiURL){
 // clear out old data before new request
     $wikiElem.text("");
 // Wikipedia AJAX request
-    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + wikiURL + '&format=json&callback=wikiCallback';
-    $.ajax({
-        url: wikiUrl,
-        dataType: "jsonp",
-        success: function( response ) {
-            var articleList = response[1];
-            for (var i =0; i < articleList.length; i++){
-                articleStr = articleList[i];
-                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-                $wikiElem.append('<li><a href ="' + url + '" target="_blank">' + articleStr + '</a></li>');
-            }
-         },
-         error: function(errorMessage){
-           $wikiElem.text("failed to get wikipedia resources");
-         }
-    });
+
+var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search=' + wikiURL + '&format=json&callback=wikiCallback';
+  $.ajax({
+    url: wikiUrl,
+    dataType: "jsonp",
+    success: function( response ) {
+      var articleList = response[1];
+      var alen = articleList.length;
+      for (var i =0; i < alen; i++){
+        articleStr = articleList[i];
+        var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+        $wikiElem.append('<li><a href ="' + url + '" target="_blank">' + articleStr + '</a></li>');
+      }
+    },error: function(errorMessage){
+        $wikiElem.text("failed to get wikipedia resources");
+      }
+  });
 };
 
 var viewModel = function(){
@@ -54,10 +55,10 @@ var viewModel = function(){
     self.listVisible = ko.observable(true);
     //select current point
     self.selectPoint = function(point) {
-      // store new point
-      self.currentPoint(point);
-      // call wikipedia routine with new point
-      CallWiki(self.currentPoint().wikiURL);
+    // store new point
+    self.currentPoint(point);
+    // call wikipedia routine with new point
+    CallWiki(self.currentPoint().wikiURL);
       point.marker.setIcon(point.greenIcon);
     };
     // When mouse lands on marker or list item turn marker blue
